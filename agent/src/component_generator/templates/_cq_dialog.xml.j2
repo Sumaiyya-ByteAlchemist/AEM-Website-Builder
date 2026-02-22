@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="{{ title }}"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+{% if tabs %}
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs"
+                maximized="{Boolean}true">
+                <items jcr:primaryType="nt:unstructured">
+{% for tab_name, tab_props in tabs.items() %}
+                    <{{ tab_name | lower | replace(' ', '') }}
+                        jcr:primaryType="nt:unstructured"
+                        jcr:title="{{ tab_name }}"
+                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        <items jcr:primaryType="nt:unstructured">
+{% for prop in tab_props %}
+                            <{{ prop.node_name }}
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="{{ prop.resource_type }}"
+                                fieldLabel="{{ prop.label }}"
+                                name="./{{ prop.name }}"
+{% if prop.required %}
+                                required="{Boolean}true"
+{% endif %}
+{% for attr_key, attr_val in prop.extra_attrs.items() %}
+                                {{ attr_key }}="{{ attr_val }}"
+{% endfor %}
+                            />
+{% endfor %}
+                        </items>
+                    </{{ tab_name | lower | replace(' ', '') }}>
+{% endfor %}
+                </items>
+            </tabs>
+        </items>
+{% else %}
+        sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+        <items jcr:primaryType="nt:unstructured">
+            <column
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/container">
+                <items jcr:primaryType="nt:unstructured">
+{% for prop in properties %}
+                    <{{ prop.node_name }}
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="{{ prop.resource_type }}"
+                        fieldLabel="{{ prop.label }}"
+                        name="./{{ prop.name }}"
+{% if prop.required %}
+                        required="{Boolean}true"
+{% endif %}
+{% for attr_key, attr_val in prop.extra_attrs.items() %}
+                        {{ attr_key }}="{{ attr_val }}"
+{% endfor %}
+                    />
+{% endfor %}
+                </items>
+            </column>
+        </items>
+{% endif %}
+    </content>
+</jcr:root>

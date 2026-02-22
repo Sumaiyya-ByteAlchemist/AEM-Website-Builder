@@ -7,3 +7,14 @@
 ### IntelliJ ###
 .idea/
 *.iml
+
+### Agent ###
+agent/venv/
+agent/.env
+agent/output/
+agent/__pycache__/
+agent/src/**/__pycache__/
+agent/tests/**/__pycache__/
+agent/*.egg-info/
+*.pyc
+*.pyo

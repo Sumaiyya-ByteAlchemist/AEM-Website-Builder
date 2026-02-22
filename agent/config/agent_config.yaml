@@ -1,0 +1,165 @@
+# ============================================================================
+# AEM Experience Modernization Agent - Configuration
+# ============================================================================
+
+agent:
+  name: "AEM Experience Modernization Agent"
+  version: "1.0.0"
+
+# --- LLM Configuration ---
+llm:
+  provider: "anthropic"
+  model: "claude-sonnet-4-20250514"
+  max_tokens: 8192
+  temperature: 0.2
+
+# --- Source Analysis ---
+source_analysis:
+  # Crawler settings
+  crawler:
+    max_pages: 50
+    max_depth: 5
+    timeout_seconds: 30
+    user_agent: "AEM-Modernization-Agent/1.0"
+    respect_robots_txt: true
+    concurrent_requests: 3
+    delay_between_requests: 1.0
+
+  # DOM decomposition
+  dom_decomposition:
+    # Sections to identify
+    semantic_sections:
+      - header
+      - navigation
+      - hero
+      - content
+      - sidebar
+      - footer
+      - form
+      - carousel
+      - accordion
+      - tabs
+      - teaser
+      - card
+      - list
+      - breadcrumb
+      - search
+
+  # Component classification confidence threshold
+  classification:
+    min_confidence: 0.7
+    # Categories: core_component, core_extension, custom_component, container, template_region
+    fallback_category: "custom_component"
+
+# --- Figma Pipeline ---
+figma:
+  mcp_server:
+    url: "http://localhost:3845"
+    timeout_seconds: 30
+  design_tokens:
+    extract_colors: true
+    extract_typography: true
+    extract_spacing: true
+    extract_breakpoints: true
+  component_mapping:
+    auto_detect: true
+    confidence_threshold: 0.75
+
+# --- AEM Project Settings ---
+aem:
+  version: "6.5.7"
+  # Project generated from archetype
+  project:
+    group_id: "com.modernized"
+    artifact_id: "modernized-site"
+    app_title: "Modernized Site"
+    app_id: "modernizedsite"
+    package: "com.modernized"
+  # Core Components version
+  core_components_version: "2.21.2"
+  # Component paths
+  paths:
+    components: "/apps/${appId}/components"
+    templates: "/conf/${appId}/settings/wcm/templates"
+    policies: "/conf/${appId}/settings/wcm/policies"
+    clientlibs: "/apps/${appId}/clientlibs"
+    content: "/content/${appId}"
+    dam: "/content/dam/${appId}"
+
+# --- Component Generation ---
+component_generation:
+  # HTL (Sightly) template generation
+  htl:
+    use_data_sly_use: true
+    use_core_component_inheritance: true
+    wcm_mode_handling: true
+  # Dialog generation (Touch UI)
+  dialog:
+    use_coral_ui: true
+    include_design_dialog: false
+    rich_text_plugins:
+      - format
+      - justify
+      - lists
+      - links
+      - paraformat
+  # Sling Model generation
+  sling_model:
+    injection_strategy: "OPTIONAL"
+    adaptables: ["SlingHttpServletRequest"]
+    use_lombok: false
+  # Client library generation
+  clientlib:
+    categories_prefix: "${appId}"
+    css_preprocessor: "none"  # none, less, sass
+    js_minification: true
+    css_minification: true
+
+# --- Template Assembly ---
+template_assembly:
+  # Default page template structure
+  default_structure:
+    - header
+    - responsivegrid
+    - footer
+  # Layout container
+  layout_container:
+    type: "wcm/foundation/components/responsivegrid"
+    max_columns: 12
+
+# --- Content Migration ---
+content_migration:
+  # Content extraction
+  extract:
+    include_assets: true
+    include_metadata: true
+    download_images: true
+    max_image_width: 2048
+  # Content package
+  package:
+    group: "modernization"
+    version: "1.0.0"
+
+# --- Deployment ---
+deployment:
+  sdk:
+    jar_pattern: "aem-sdk-quickstart-*.jar"
+    port_author: 4502
+    port_publish: 4503
+    run_modes:
+      - "author"
+      - "nosamplecontent"
+    jvm_args: "-Xmx2048m -XX:MaxPermSize=512m"
+  validation:
+    check_components: true
+    check_templates: true
+    check_content: true
+    check_clientlibs: true
+    lighthouse_audit: false
+
+# --- Output ---
+output:
+  base_dir: "./output"
+  aem_project_dir: "./output/aem-project"
+  reports_dir: "./output/reports"
+  packages_dir: "./output/packages"

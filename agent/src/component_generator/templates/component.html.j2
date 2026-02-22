@@ -1,0 +1,90 @@
+<!--/*
+    {{ title }} Component
+    ================================================================================
+    sling:resourceType: {{ resource_type }}
+{% if super_type %}    sling:resourceSuperType: {{ super_type }}{% endif %}
+*/-->
+{% if component_type == 'core_extension' %}
+<div class="cmp-{{ name }}"
+     data-cmp-is="{{ name }}"
+     data-sly-use.model="${ '{{ model_class }}' }"
+     data-sly-test="${model}">
+
+    {# Delegate to the core component for base rendering #}
+    <sly data-sly-resource="${ '.' @ resourceType='{{ super_type }}'}" />
+
+    {# Additional markup for extension #}
+{% for slot in extra_slots %}
+{% if slot.type == 'text' %}
+    <div class="cmp-{{ name }}__{{ slot.name }}"
+         data-sly-test="${model.{{ slot.property }}}"
+         data-sly-unwrap>
+        ${model.{{ slot.property }} @ context='html'}
+    </div>
+{% elif slot.type == 'image' %}
+    <div class="cmp-{{ name }}__{{ slot.name }}"
+         data-sly-test="${model.{{ slot.property }}}">
+        <img src="${model.{{ slot.property }}}" alt=""/>
+    </div>
+{% endif %}
+{% endfor %}
+</div>
+
+{% elif component_type == 'custom_component' %}
+<div class="cmp-{{ name }}"
+     data-cmp-is="{{ name }}"
+     data-sly-use.model="${ '{{ model_class }}' }"
+     data-sly-test="${model}">
+
+{% for slot in content_slots %}
+{% if slot.type == 'title' %}
+    <{{ slot.heading_level | default('h2') }} class="cmp-{{ name }}__title"
+       data-sly-test="${model.{{ slot.property | default('title') }}}">
+        ${model.{{ slot.property | default('title') }}}
+    </{{ slot.heading_level | default('h2') }}>
+{% elif slot.type == 'subtitle' %}
+    <p class="cmp-{{ name }}__subtitle"
+       data-sly-test="${model.{{ slot.property | default('subtitle') }}}">
+        ${model.{{ slot.property | default('subtitle') }}}
+    </p>
+{% elif slot.type == 'text' %}
+    <div class="cmp-{{ name }}__text"
+         data-sly-test="${model.{{ slot.property | default('text') }}}">
+        ${model.{{ slot.property | default('text') }} @ context='html'}
+    </div>
+{% elif slot.type == 'image' %}
+    <div class="cmp-{{ name }}__image"
+         data-sly-test="${model.{{ slot.property | default('fileReference') }}}">
+        <img src="${model.{{ slot.property | default('fileReference') }}}"
+             alt="${model.{{ slot.alt_property | default('alt') }} || ''}"
+             loading="lazy"
+             class="cmp-{{ name }}__image-src"/>
+    </div>
+{% elif slot.type == 'button' %}
+    <a class="cmp-{{ name }}__cta"
+       data-sly-test="${model.{{ slot.link_property | default('ctaLink') }}}"
+       href="${model.{{ slot.link_property | default('ctaLink') }}}">
+        <span class="cmp-{{ name }}__cta-text">
+            ${model.{{ slot.text_property | default('ctaText') }}}
+        </span>
+    </a>
+{% elif slot.type == 'list' %}
+    <ul class="cmp-{{ name }}__list"
+        data-sly-list.item="${model.{{ slot.property | default('items') }}}">
+        <li class="cmp-{{ name }}__list-item">${item}</li>
+    </ul>
+{% endif %}
+{% endfor %}
+
+{% if is_container %}
+    <div class="cmp-{{ name }}__content">
+        <sly data-sly-resource="${'content' @ resourceType='wcm/foundation/components/responsivegrid'}" />
+    </div>
+{% endif %}
+
+</div>
+
+{% else %}
+{# Core Component Proxy #}
+<sly data-sly-resource="${ '.' @ resourceType='{{ super_type | default(resource_type) }}'}" />
+{% endif %}
