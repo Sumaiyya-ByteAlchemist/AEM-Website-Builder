@@ -1,0 +1,57 @@
+package {{ package }}.models;
+
+{% for import in imports %}
+import {{ import }};
+{% endfor %}
+
+/**
+ * Sling Model for the {{ title }} component.
+ *
+ * @sling:resourceType {{ resource_type }}
+ */
+@Model(
+    adaptables = SlingHttpServletRequest.class,
+    adapters = {{ class_name }}.class,
+    resourceType = {{ class_name }}.RESOURCE_TYPE,
+    defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
+)
+public class {{ class_name }}{% if implements %} implements {{ implements }}{% endif %} {
+
+    protected static final String RESOURCE_TYPE = "{{ resource_type }}";
+
+{% if delegate_type %}
+    @Self
+    @Via(type = ResourceSuperType.class)
+    private {{ delegate_type }} delegate;
+
+{% endif %}
+{% for field in fields %}
+    @ValueMapValue
+    private {{ field.java_type }} {{ field.java_name }};
+
+{% endfor %}
+
+    @PostConstruct
+    protected void init() {
+        // Initialization logic
+    }
+
+{% if delegate_type %}
+    /**
+     * Returns the delegate Core Component model.
+     */
+    public {{ delegate_type }} getDelegate() {
+        return delegate;
+    }
+
+{% endif %}
+{% for field in fields %}
+    /**
+     * Returns the {{ field.label | lower }}.
+     */
+    public {{ field.java_type }} get{{ field.getter_name }}() {
+        return {{ field.java_name }};
+    }
+
+{% endfor %}
+}

@@ -1,0 +1,310 @@
+# ============================================================================
+# AEM Core Component Mappings
+# Maps detected HTML/design patterns to AEM Core Components
+# ============================================================================
+
+# --- Core WCM Components ---
+core_components:
+
+  # Text Component
+  text:
+    resource_type: "core/wcm/components/text/v2/text"
+    patterns:
+      - tag: "p"
+        context: "standalone paragraph or rich text block"
+      - tag: "div"
+        class_patterns: ["text-block", "rich-text", "wysiwyg", "content-text"]
+      - tag: "article"
+        context: "text-heavy content area"
+    properties:
+      - name: "text"
+        type: "String"
+        description: "Rich text content"
+      - name: "textIsRich"
+        type: "Boolean"
+        default: true
+
+  # Title Component
+  title:
+    resource_type: "core/wcm/components/title/v3/title"
+    patterns:
+      - tag: "h1,h2,h3,h4,h5,h6"
+        context: "heading element"
+      - tag: "div"
+        class_patterns: ["title", "heading", "headline", "page-title"]
+    properties:
+      - name: "jcr:title"
+        type: "String"
+      - name: "type"
+        type: "String"
+        description: "h1-h6"
+      - name: "linkURL"
+        type: "String"
+
+  # Image Component
+  image:
+    resource_type: "core/wcm/components/image/v3/image"
+    patterns:
+      - tag: "img"
+        context: "standalone image"
+      - tag: "figure"
+        context: "image with caption"
+      - tag: "picture"
+        context: "responsive image"
+      - tag: "div"
+        class_patterns: ["image", "hero-image", "banner-image", "media"]
+    properties:
+      - name: "fileReference"
+        type: "String"
+      - name: "alt"
+        type: "String"
+      - name: "title"
+        type: "String"
+      - name: "isDecorative"
+        type: "Boolean"
+
+  # Button Component
+  button:
+    resource_type: "core/wcm/components/button/v2/button"
+    patterns:
+      - tag: "button"
+        context: "interactive button"
+      - tag: "a"
+        class_patterns: ["btn", "button", "cta", "call-to-action"]
+    properties:
+      - name: "text"
+        type: "String"
+      - name: "link"
+        type: "String"
+      - name: "icon"
+        type: "String"
+
+  # Teaser Component
+  teaser:
+    resource_type: "core/wcm/components/teaser/v2/teaser"
+    patterns:
+      - tag: "div"
+        class_patterns: ["teaser", "card", "promo", "feature-card", "content-card"]
+      - tag: "article"
+        class_patterns: ["teaser", "card"]
+      - compound:
+          - "image + title + description + cta"
+          - "thumbnail + heading + text + link"
+    properties:
+      - name: "jcr:title"
+        type: "String"
+      - name: "jcr:description"
+        type: "String"
+      - name: "linkURL"
+        type: "String"
+      - name: "actionsEnabled"
+        type: "Boolean"
+
+  # List Component
+  list:
+    resource_type: "core/wcm/components/list/v3/list"
+    patterns:
+      - tag: "ul,ol"
+        context: "list of items"
+      - tag: "div"
+        class_patterns: ["list", "item-list", "link-list", "article-list"]
+    properties:
+      - name: "listFrom"
+        type: "String"
+        description: "children, static, search, tags"
+      - name: "maxItems"
+        type: "Long"
+
+  # Navigation Component
+  navigation:
+    resource_type: "core/wcm/components/navigation/v2/navigation"
+    patterns:
+      - tag: "nav"
+        context: "site navigation"
+      - tag: "div"
+        class_patterns: ["navigation", "nav", "main-nav", "site-nav", "navbar"]
+      - tag: "ul"
+        class_patterns: ["nav-list", "menu"]
+    properties:
+      - name: "navigationRoot"
+        type: "String"
+      - name: "structureDepth"
+        type: "Long"
+      - name: "collectAllPages"
+        type: "Boolean"
+
+  # Breadcrumb Component
+  breadcrumb:
+    resource_type: "core/wcm/components/breadcrumb/v3/breadcrumb"
+    patterns:
+      - tag: "nav"
+        class_patterns: ["breadcrumb", "breadcrumbs"]
+      - tag: "ol,ul"
+        class_patterns: ["breadcrumb", "breadcrumbs"]
+    properties:
+      - name: "startLevel"
+        type: "Long"
+      - name: "showHidden"
+        type: "Boolean"
+
+  # Accordion Component
+  accordion:
+    resource_type: "core/wcm/components/accordion/v1/accordion"
+    patterns:
+      - tag: "div"
+        class_patterns: ["accordion", "collapse", "expandable", "faq"]
+      - compound:
+          - "toggle + panel pattern"
+    properties:
+      - name: "singleExpansion"
+        type: "Boolean"
+      - name: "expandedItems"
+        type: "String[]"
+
+  # Tabs Component
+  tabs:
+    resource_type: "core/wcm/components/tabs/v1/tabs"
+    patterns:
+      - tag: "div"
+        class_patterns: ["tabs", "tab-container", "tabbed"]
+      - compound:
+          - "tab-list + tab-panel pattern"
+    properties:
+      - name: "activeItem"
+        type: "String"
+
+  # Carousel Component
+  carousel:
+    resource_type: "core/wcm/components/carousel/v1/carousel"
+    patterns:
+      - tag: "div"
+        class_patterns: ["carousel", "slider", "slideshow", "swiper", "slick"]
+    properties:
+      - name: "autoplay"
+        type: "Boolean"
+      - name: "delay"
+        type: "Long"
+      - name: "autopauseDisabled"
+        type: "Boolean"
+
+  # Experience Fragment Component
+  experiencefragment:
+    resource_type: "core/wcm/components/experiencefragment/v2/experiencefragment"
+    patterns:
+      - tag: "div"
+        class_patterns: ["shared-component", "global-component", "fragment"]
+      - context: "header or footer that appears across pages"
+    properties:
+      - name: "fragmentVariationPath"
+        type: "String"
+
+  # Container / Layout Container
+  container:
+    resource_type: "core/wcm/components/container/v1/container"
+    patterns:
+      - tag: "div"
+        class_patterns: ["container", "wrapper", "section", "row", "grid"]
+      - tag: "section"
+        context: "content section wrapper"
+    properties:
+      - name: "layout"
+        type: "String"
+        description: "simple, responsiveGrid"
+
+  # Separator Component
+  separator:
+    resource_type: "core/wcm/components/separator/v1/separator"
+    patterns:
+      - tag: "hr"
+        context: "horizontal rule / divider"
+      - tag: "div"
+        class_patterns: ["divider", "separator"]
+
+  # Embed Component
+  embed:
+    resource_type: "core/wcm/components/embed/v2/embed"
+    patterns:
+      - tag: "iframe"
+        context: "embedded content"
+      - tag: "div"
+        class_patterns: ["embed", "video-embed", "social-embed"]
+      - tag: "video"
+        context: "video player"
+    properties:
+      - name: "type"
+        type: "String"
+        description: "url, embeddable, html"
+      - name: "url"
+        type: "String"
+
+  # Content Fragment Component
+  contentfragment:
+    resource_type: "core/wcm/components/contentfragment/v1/contentfragment"
+    patterns:
+      - context: "structured content from content fragment"
+    properties:
+      - name: "fragmentPath"
+        type: "String"
+      - name: "elementNames"
+        type: "String[]"
+
+  # Download Component
+  download:
+    resource_type: "core/wcm/components/download/v2/download"
+    patterns:
+      - tag: "a"
+        context: "file download link"
+      - tag: "div"
+        class_patterns: ["download", "file-download"]
+    properties:
+      - name: "fileReference"
+        type: "String"
+      - name: "jcr:title"
+        type: "String"
+
+  # Search Component
+  search:
+    resource_type: "core/wcm/components/search/v1/search"
+    patterns:
+      - tag: "form"
+        class_patterns: ["search", "search-form", "site-search"]
+      - tag: "div"
+        class_patterns: ["search-bar", "search-box"]
+    properties:
+      - name: "searchRoot"
+        type: "String"
+      - name: "resultsSize"
+        type: "Long"
+
+  # Language Navigation Component
+  languagenavigation:
+    resource_type: "core/wcm/components/languagenavigation/v2/languagenavigation"
+    patterns:
+      - tag: "div"
+        class_patterns: ["language-selector", "locale-switcher", "lang-nav"]
+    properties:
+      - name: "navigationRoot"
+        type: "String"
+      - name: "structureDepth"
+        type: "Long"
+
+# --- Classification Heuristics ---
+classification_rules:
+  # Priority order for matching
+  priority:
+    - exact_class_match
+    - semantic_tag_match
+    - compound_pattern_match
+    - llm_classification
+
+  # When to suggest Core Component extension vs custom
+  extension_triggers:
+    - "requires additional properties beyond core"
+    - "needs custom styling but same structure"
+    - "needs additional child components"
+
+  custom_component_triggers:
+    - "no matching core component pattern"
+    - "complex interactive behavior"
+    - "third-party integration required"
+    - "unique layout structure"

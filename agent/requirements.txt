@@ -1,0 +1,39 @@
+# AEM Experience Modernization Agent - Dependencies
+
+# Core
+anthropic>=0.39.0
+pyyaml>=6.0.1
+jinja2>=3.1.3
+click>=8.1.7
+
+# Web Crawling & DOM Analysis
+beautifulsoup4>=4.12.3
+requests>=2.31.0
+lxml>=5.1.0
+selenium>=4.16.0
+playwright>=1.41.0
+
+# Figma MCP Integration
+httpx>=0.27.0
+websockets>=12.0
+
+# Image Analysis
+Pillow>=10.2.0
+
+# AEM Package Building
+zipfile36>=0.1.3
+
+# Content Processing
+markdownify>=0.12.1
+cssutils>=2.9.0
+
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+pytest-mock>=3.12.0
+
+# Utilities
+python-dotenv>=1.0.0
+rich>=13.7.0
+tqdm>=4.66.0
+jsonschema>=4.21.0

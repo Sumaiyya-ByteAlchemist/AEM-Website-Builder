@@ -1,0 +1,70 @@
+/* {{ title }} Component */
+.cmp-{{ name }} {
+  display: block;
+  position: relative;
+{% if padding %}
+  padding: {{ padding.top }}px {{ padding.right }}px {{ padding.bottom }}px {{ padding.left }}px;
+{% endif %}
+}
+
+{% for slot in content_slots %}
+.cmp-{{ name }}__{{ slot.name }} {
+{% if slot.type == 'title' %}
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+{% elif slot.type == 'subtitle' %}
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+  margin-bottom: 1em;
+{% elif slot.type == 'text' %}
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  margin-bottom: 1em;
+{% elif slot.type == 'image' %}
+  width: 100%;
+  overflow: hidden;
+{% elif slot.type == 'button' %}
+  display: inline-block;
+  padding: 0.75em 1.5em;
+  background-color: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+{% endif %}
+}
+
+{% if slot.type == 'button' %}
+.cmp-{{ name }}__{{ slot.name }}:hover,
+.cmp-{{ name }}__{{ slot.name }}:focus {
+  opacity: 0.85;
+}
+{% endif %}
+
+{% if slot.type == 'image' %}
+.cmp-{{ name }}__{{ slot.name }}-src {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+{% endif %}
+
+{% endfor %}
+
+{% for style in style_system_styles %}
+/* Style: {{ style.label }} */
+.{{ style.css_class }} {
+  /* variant-specific styles */
+}
+
+{% endfor %}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cmp-{{ name }} {
+    padding: var(--space-md);
+  }
+}
